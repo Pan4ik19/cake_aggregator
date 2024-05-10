@@ -5,18 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Partner extends User
+class Review extends Model
 {
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'post_id',
         'user_id',
-        'wallet',
+        'content',
         'grade'
     ];
 
@@ -26,13 +24,13 @@ class Partner extends User
         'deleted_at'
     ];
 
+    public function post(): BelongsTo
+    {
+        return $this->belongsTo(Post::class,'id', 'post_id');
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'id', 'user_id');
-    }
-
-    public function posts(): HasMany
-    {
-        return $this->hasMany(Post::class, 'partner_id', 'id');
     }
 }
